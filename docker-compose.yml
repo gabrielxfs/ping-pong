@@ -1,0 +1,42 @@
+# Stack version: FLASHMAN_INGRESS_DEVOPS_VERSION
+
+version: "3.8"
+
+# To dispatch on host:
+# sudo docker network create --attachable --driver overlay --scope swarm swarm_overlay_network
+networks:
+  swarm_overlay_network:
+    driver: overlay
+    external: true
+
+services:
+  pang:
+    image: gabrielw1n3/ping:test
+    environment:
+      - NAME=${NAME1:-pang}
+      - OPTS=${OPTS1:-}
+      - TARGET=${TARGET1:-pong}
+    networks:
+      swarm_overlay_network:
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+  pong:
+    image: gabrielw1n3/ping:test
+    environment:
+      - NAME=${NAME2:-pong}
+      - OPTS=${OPTS2:-}
+      - TARGET=${TARGET2:-pang}
+    networks:
+      swarm_overlay_network:
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
