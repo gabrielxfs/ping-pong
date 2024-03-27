@@ -16,6 +16,10 @@ services:
       - NAME=${NAME1:-pang}
       - OPTS=${OPTS1:-}
       - TARGET=${TARGET1:-pong}
+      - IN=${IN1:-8081}
+      - OUT=${OUT1:-8082}
+    ports:
+      - "${PORT1:-8081}:80"
     networks:
       swarm_overlay_network:
     deploy:
@@ -31,6 +35,10 @@ services:
       - NAME=${NAME2:-pong}
       - OPTS=${OPTS2:-}
       - TARGET=${TARGET2:-pang}
+      - IN=${IN2:-8082}
+      - OUT=${OUT2:-8081}
+    ports:
+      - "${PORT2:-8082}:80"
     networks:
       swarm_overlay_network:
     deploy:
